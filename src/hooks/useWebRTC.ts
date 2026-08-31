@@ -72,7 +72,7 @@ export function useWebRTC({ roomId, userName, localStream }: UseWebRTCProps) {
   }, [localStream]);
 
   // Create and send offer
-  const createOffer = async () => {
+  const createOffer = useCallback(async () => {
     if (!peerConnection.current || !pusherChannel.current) return;
     try {
       const offer = await peerConnection.current.createOffer();
@@ -84,7 +84,7 @@ export function useWebRTC({ roomId, userName, localStream }: UseWebRTCProps) {
     } catch (err) {
       console.error('Error creating offer:', err);
     }
-  };
+  }, [userName]);
 
   useEffect(() => {
     if (!process.env.NEXT_PUBLIC_PUSHER_KEY) {
@@ -182,7 +182,7 @@ export function useWebRTC({ roomId, userName, localStream }: UseWebRTCProps) {
       }
       pusher.unsubscribe(channelName);
     };
-  }, [roomId, userName, initWebRTC]);
+  }, [roomId, userName, initWebRTC, createOffer]);
 
   // Method to replace video track for screen sharing
   const replaceVideoTrack = async (newTrack: MediaStreamTrack) => {

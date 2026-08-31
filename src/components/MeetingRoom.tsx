@@ -4,7 +4,6 @@ import { useEffect, useState, useRef } from 'react';
 import { Mic, MicOff, Video as VideoIcon, VideoOff, MonitorUp, MessageSquare, Users, PhoneOff, Send } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useWebRTC } from '@/hooks/useWebRTC';
-import type { Channel } from 'pusher-js';
 
 interface MeetingRoomProps {
   roomId: string;

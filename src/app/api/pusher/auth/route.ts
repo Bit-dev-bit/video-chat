@@ -4,10 +4,6 @@ import { pusherServer } from '@/lib/pusher';
 export async function POST(req: Request) {
   try {
     const data = await req.text();
-    const [socketId, channelName, userName] = data.split('&').map(str => str.split('=')[1]);
-    
-    const decodedSocketId = decodeURIComponent(socketId);
-    const decodedChannelName = decodeURIComponent(channelName);
     
     // In a real app we'd validate the user session, but this is a college project
     // so we just trust the name passed (or we can extract it from headers/body differently).
