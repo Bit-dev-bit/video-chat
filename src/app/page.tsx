@@ -1,101 +1,106 @@
-import Image from "next/image";
+import Link from 'next/link';
+import { Video, MessageSquare, MonitorUp, Users, UserX, ArrowRight } from 'lucide-react';
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="min-h-screen bg-gray-950 text-gray-100 flex flex-col font-sans">
+      {/* Header */}
+      <header className="border-b border-gray-800 bg-gray-900/50 backdrop-blur-md sticky top-0 z-50">
+        <div className="container mx-auto px-6 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="bg-blue-600 p-2 rounded-lg">
+              <Video className="w-5 h-5 text-white" />
+            </div>
+            <span className="text-xl font-bold tracking-tight">MeetSync</span>
+          </div>
+          <nav className="flex gap-6 text-sm font-medium text-gray-400">
+            <Link href="/" className="hover:text-white transition-colors">Home</Link>
+            <Link href="#" className="hover:text-white transition-colors">About</Link>
+          </nav>
         </div>
+      </header>
+
+      {/* Hero */}
+      <main className="flex-1 flex flex-col items-center">
+        <section className="w-full max-w-5xl mx-auto px-6 py-24 text-center flex flex-col items-center">
+          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 bg-gradient-to-r from-blue-400 to-indigo-500 bg-clip-text text-transparent">
+            Simple. Fast. Reliable Video Meetings.
+          </h1>
+          <p className="text-xl text-gray-400 mb-10 max-w-2xl">
+            Connect with your classmates, friends and teams using real-time video communication. No downloads or accounts required.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+            <Link 
+              href="/join?action=create" 
+              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all flex items-center justify-center gap-2"
+            >
+              <Video className="w-5 h-5" />
+              Create Meeting
+            </Link>
+            <Link 
+              href="/join" 
+              className="bg-gray-800 hover:bg-gray-700 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all flex items-center justify-center gap-2 border border-gray-700"
+            >
+              Join Meeting
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+          </div>
+        </section>
+
+        {/* Features */}
+        <section className="w-full bg-gray-900 py-24 border-t border-gray-800">
+          <div className="max-w-6xl mx-auto px-6">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl font-bold mb-4">Everything you need</h2>
+              <p className="text-gray-400">Built for seamless college project demonstrations and real-world usage.</p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <FeatureCard 
+                icon={<Video className="w-6 h-6 text-blue-400" />}
+                title="HD Video Calling"
+                description="Crystal clear peer-to-peer video connections powered by WebRTC."
+              />
+              <FeatureCard 
+                icon={<MessageSquare className="w-6 h-6 text-green-400" />}
+                title="Real-Time Chat"
+                description="Send text messages to meeting participants instantly during calls."
+              />
+              <FeatureCard 
+                icon={<MonitorUp className="w-6 h-6 text-purple-400" />}
+                title="Screen Sharing"
+                description="Share your screen, presentations, or specific application windows easily."
+              />
+              <FeatureCard 
+                icon={<Users className="w-6 h-6 text-orange-400" />}
+                title="Participant Management"
+                description="See who is in the room and view their microphone and camera status."
+              />
+              <FeatureCard 
+                icon={<UserX className="w-6 h-6 text-pink-400" />}
+                title="No Account Required"
+                description="Just enter your name, create a room, and share the link. No friction."
+              />
+            </div>
+          </div>
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      <footer className="border-t border-gray-800 py-8 text-center text-gray-500 text-sm">
+        <p>Built as a college project demonstrating WebRTC capabilities.</p>
       </footer>
+    </div>
+  );
+}
+
+function FeatureCard({ icon, title, description }: { icon: React.ReactNode, title: string, description: string }) {
+  return (
+    <div className="bg-gray-800/50 border border-gray-700/50 p-6 rounded-2xl hover:bg-gray-800 transition-colors">
+      <div className="bg-gray-900 w-12 h-12 rounded-xl flex items-center justify-center mb-6 shadow-inner">
+        {icon}
+      </div>
+      <h3 className="text-xl font-semibold mb-3 text-gray-100">{title}</h3>
+      <p className="text-gray-400 leading-relaxed">{description}</p>
     </div>
   );
 }
