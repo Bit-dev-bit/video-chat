@@ -264,7 +264,7 @@ export default function MeetingRoom({ roomId, userName, initialStream }: Meeting
           </div>
 
           {/* Bottom Controls */}
-          <div className="mt-4 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-2 sm:gap-4 shrink-0 pb-2">
             <button
               onClick={toggleMic}
               className={`p-3 sm:p-4 rounded-2xl transition-colors shadow-lg ${
@@ -323,7 +323,7 @@ export default function MeetingRoom({ roomId, userName, initialStream }: Meeting
 
         {/* Side Panels (Chat / Participants) */}
         {(showChat || showParticipants) && (
-          <div className="w-80 bg-gray-900 rounded-3xl border border-gray-800 flex flex-col overflow-hidden shadow-2xl hidden md:flex shrink-0">
+          <div className="absolute inset-0 z-20 md:relative md:inset-auto md:w-80 bg-gray-900 md:rounded-3xl border-l md:border border-gray-800 flex flex-col overflow-hidden shadow-2xl shrink-0">
             {/* Panel Header */}
             <div className="p-4 border-b border-gray-800 bg-gray-800/50 flex justify-between items-center">
               <h2 className="font-semibold text-lg">{showChat ? 'In-Meeting Chat' : 'Participants'}</h2>
