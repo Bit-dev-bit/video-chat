@@ -206,7 +206,7 @@ export function useWebRTC({ roomId, userName, localStream }: UseWebRTCProps) {
     };
   }, [roomId, userName, initWebRTC, createOffer]);
 
-  // Method to replace video track for screen sharing
+  // Method to replace video track for screen sharing or camera change
   const replaceVideoTrack = async (newTrack: MediaStreamTrack) => {
     if (!peerConnection.current) return;
     const senders = peerConnection.current.getSenders();
@@ -216,12 +216,23 @@ export function useWebRTC({ roomId, userName, localStream }: UseWebRTCProps) {
     }
   };
 
+  // Method to replace audio track
+  const replaceAudioTrack = async (newTrack: MediaStreamTrack) => {
+    if (!peerConnection.current) return;
+    const senders = peerConnection.current.getSenders();
+    const audioSender = senders.find(sender => sender.track?.kind === 'audio');
+    if (audioSender) {
+      await audioSender.replaceTrack(newTrack);
+    }
+  };
+
   return {
     remoteStream,
     connectionState,
     error,
     remoteUserName,
     pusherChannel: pusherChannel.current,
-    replaceVideoTrack
+    replaceVideoTrack,
+    replaceAudioTrack
   };
 }

@@ -14,7 +14,7 @@ function JoinContent() {
 
   useEffect(() => {
     if (action === 'create') {
-      const newRoomId = uuidv4().substring(0, 11).toUpperCase(); // e.g., ABCD-EFGH
+      const newRoomId = Math.floor(1000 + Math.random() * 9000).toString(); // e.g., 4829
       router.replace(`/room/${newRoomId}`);
     }
   }, [action, router]);
@@ -56,8 +56,11 @@ function JoinContent() {
               value={roomId}
               onChange={(e) => setRoomId(e.target.value)}
               className="w-full bg-gray-800 border border-gray-700 text-white rounded-xl py-3 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all placeholder-gray-500"
-              placeholder="e.g. ABC-123-XYZ"
+              placeholder="e.g. 1234"
               required
+              maxLength={4}
+              pattern="\d{4}"
+              title="Please enter a 4-digit code"
             />
           </div>
           <button

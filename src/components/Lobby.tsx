@@ -32,7 +32,23 @@ export default function Lobby({ roomId, onJoin }: LobbyProps) {
       } catch (err) {
         console.error('Error accessing media devices:', err);
         setError('Unable to access camera or microphone. You can still join without them.');
-        // Create an empty stream so we can still join
+        setIsMicOn(false);
+        setIsVideoOn(false);
+        
+        // Create dummy tracks so the RTCPeerConnection has senders we can replace later
+        const ctx = new AudioContext();
+        const dest = ctx.createMediaStreamDestination();
+        const dummyAudio = dest.stream.getAudioTracks()[0];
+        dummyAudio.enabled = false;
+
+        const canvas = document.createElement('canvas');
+        canvas.width = 640;
+        canvas.height = 480;
+        const dummyVideo = canvas.captureStream().getVideoTracks()[0];
+        dummyVideo.enabled = false;
+
+        const dummyStream = new MediaStream([dummyAudio, dummyVideo]);
+        setStream(dummyStream);
       }
     }
     setupMedia();

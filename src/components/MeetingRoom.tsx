@@ -45,7 +45,8 @@ export default function MeetingRoom({ roomId, userName, initialStream }: Meeting
     error, 
     remoteUserName, 
     pusherChannel,
-    replaceVideoTrack 
+    replaceVideoTrack,
+    replaceAudioTrack
   } = useWebRTC({ roomId, userName, localStream: initialStream });
 
   // Handle Initial Stream
@@ -54,8 +55,11 @@ export default function MeetingRoom({ roomId, userName, initialStream }: Meeting
     if (initialStream) {
       const audioTrack = initialStream.getAudioTracks()[0];
       const videoTrack = initialStream.getVideoTracks()[0];
-      if (audioTrack) setIsMicOn(audioTrack.enabled);
-      if (videoTrack) setIsVideoOn(videoTrack.enabled);
+      if (audioTrack && audioTrack.label !== '') setIsMicOn(audioTrack.enabled);
+      else setIsMicOn(false); // Dummy track
+      
+      if (videoTrack && videoTrack.label !== '') setIsVideoOn(videoTrack.enabled);
+      else setIsVideoOn(false); // Dummy track
 
       if (localVideoRef.current) {
         localVideoRef.current.srcObject = initialStream;
@@ -89,21 +93,45 @@ export default function MeetingRoom({ roomId, userName, initialStream }: Meeting
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, showChat]);
 
-  const toggleMic = () => {
+  const toggleMic = async () => {
     if (initialStream) {
-      initialStream.getAudioTracks().forEach(track => {
-        track.enabled = !isMicOn;
-      });
-      setIsMicOn(!isMicOn);
+      const audioTrack = initialStream.getAudioTracks()[0];
+      if (audioTrack && audioTrack.label === '') {
+        try {
+          const newStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          const newTrack = newStream.getAudioTracks()[0];
+          initialStream.removeTrack(audioTrack);
+          initialStream.addTrack(newTrack);
+          await replaceAudioTrack(newTrack);
+          setIsMicOn(true);
+        } catch (e) {
+          alert('Microphone permission denied.');
+        }
+      } else if (audioTrack) {
+        audioTrack.enabled = !isMicOn;
+        setIsMicOn(!isMicOn);
+      }
     }
   };
 
-  const toggleVideo = () => {
+  const toggleVideo = async () => {
     if (initialStream) {
-      initialStream.getVideoTracks().forEach(track => {
-        track.enabled = !isVideoOn;
-      });
-      setIsVideoOn(!isVideoOn);
+      const videoTrack = initialStream.getVideoTracks()[0];
+      if (videoTrack && videoTrack.label === '') {
+        try {
+          const newStream = await navigator.mediaDevices.getUserMedia({ video: true });
+          const newTrack = newStream.getVideoTracks()[0];
+          initialStream.removeTrack(videoTrack);
+          initialStream.addTrack(newTrack);
+          await replaceVideoTrack(newTrack);
+          setIsVideoOn(true);
+        } catch (e) {
+          alert('Camera permission denied.');
+        }
+      } else if (videoTrack) {
+        videoTrack.enabled = !isVideoOn;
+        setIsVideoOn(!isVideoOn);
+      }
     }
   };
 
@@ -215,7 +243,7 @@ export default function MeetingRoom({ roomId, userName, initialStream }: Meeting
                 ref={remoteVideoRef}
                 autoPlay
                 playsInline
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain bg-black"
               />
             ) : (
               <div className="flex flex-col items-center text-gray-500 p-8 text-center">
@@ -244,7 +272,7 @@ export default function MeetingRoom({ roomId, userName, initialStream }: Meeting
                   autoPlay
                   playsInline
                   muted
-                  className={`w-full h-full object-cover ${!isScreenSharing ? 'transform scale-x-[-1]' : ''}`}
+                  className={`w-full h-full ${isScreenSharing ? 'object-contain bg-black' : 'object-cover'} ${!isScreenSharing ? 'transform scale-x-[-1]' : ''}`}
                 />
               ) : (
                 <div className="w-full h-full flex flex-col items-center justify-center bg-gray-800 text-gray-500">
