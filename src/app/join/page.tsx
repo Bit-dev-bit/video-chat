@@ -2,7 +2,6 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { v4 as uuidv4 } from 'uuid';
 import { Video, ArrowRight, Keyboard } from 'lucide-react';
 
 function JoinContent() {

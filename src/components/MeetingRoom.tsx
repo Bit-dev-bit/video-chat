@@ -104,7 +104,7 @@ export default function MeetingRoom({ roomId, userName, initialStream }: Meeting
           initialStream.addTrack(newTrack);
           await replaceAudioTrack(newTrack);
           setIsMicOn(true);
-        } catch (e) {
+        } catch {
           alert('Microphone permission denied.');
         }
       } else if (audioTrack) {
@@ -125,7 +125,7 @@ export default function MeetingRoom({ roomId, userName, initialStream }: Meeting
           initialStream.addTrack(newTrack);
           await replaceVideoTrack(newTrack);
           setIsVideoOn(true);
-        } catch (e) {
+        } catch {
           alert('Camera permission denied.');
         }
       } else if (videoTrack) {
