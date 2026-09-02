@@ -176,7 +176,7 @@ export default function MeetingRoom({ roomId, userName, initialStream }: Meeting
   };
 
   return (
-    <div className="h-screen bg-gray-950 flex flex-col font-sans text-white">
+    <div className="h-[100dvh] bg-gray-950 flex flex-col font-sans text-white">
       {/* Header */}
       <header className="h-16 border-b border-gray-800 flex items-center justify-between px-4 sm:px-6 bg-gray-900/80 backdrop-blur-sm z-10 relative">
         <div className="flex items-center gap-4">

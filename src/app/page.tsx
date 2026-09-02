@@ -3,7 +3,7 @@ import { Video, MessageSquare, MonitorUp, Users, UserX, ArrowRight } from 'lucid
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gray-950 text-gray-100 flex flex-col font-sans">
+    <div className="min-h-[100dvh] bg-gray-950 text-gray-100 flex flex-col font-sans">
       {/* Header */}
       <header className="border-b border-gray-800 bg-gray-900/50 backdrop-blur-md sticky top-0 z-50">
         <div className="container mx-auto px-6 h-16 flex items-center justify-between">

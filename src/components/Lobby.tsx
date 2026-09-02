@@ -67,8 +67,8 @@ export default function Lobby({ roomId, onJoin }: LobbyProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 flex flex-col items-center justify-center p-4">
-      <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-8 bg-gray-900 border border-gray-800 rounded-3xl p-8 shadow-2xl">
+    <div className="min-h-[100dvh] bg-gray-950 flex flex-col items-center justify-center p-4">
+      <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-8 bg-gray-900 border border-gray-800 rounded-3xl p-6 md:p-8 shadow-2xl">
         
         {/* Video Preview Section */}
         <div className="flex flex-col items-center">

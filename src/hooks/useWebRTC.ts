@@ -127,12 +127,42 @@ export function useWebRTC({ roomId, userName, localStream }: UseWebRTCProps) {
       }
     });
 
+    // Handle incoming ICE candidates
+    let pendingCandidates: RTCIceCandidateInit[] = [];
+    
+    channel.bind('client-ice-candidate', async (data: { candidate: RTCIceCandidateInit }) => {
+      if (!peerConnection.current) return;
+      if (!peerConnection.current.remoteDescription) {
+        pendingCandidates.push(data.candidate);
+        return;
+      }
+      try {
+        await peerConnection.current.addIceCandidate(new RTCIceCandidate(data.candidate));
+      } catch (err) {
+        console.error('Error adding ICE candidate:', err);
+      }
+    });
+
+    // We need to process pending candidates after setting remote description
+    const processPendingCandidates = async () => {
+      if (!peerConnection.current) return;
+      for (const candidate of pendingCandidates) {
+        try {
+          await peerConnection.current.addIceCandidate(new RTCIceCandidate(candidate));
+        } catch (err) {
+          console.error('Error adding pending ICE candidate:', err);
+        }
+      }
+      pendingCandidates = [];
+    };
+
     // Handle incoming offer
     channel.bind('client-offer', async (data: { sdp: RTCSessionDescriptionInit, userName: string }) => {
       if (!peerConnection.current) return;
       setRemoteUserName(data.userName);
       try {
         await peerConnection.current.setRemoteDescription(new RTCSessionDescription(data.sdp));
+        await processPendingCandidates();
         const answer = await peerConnection.current.createAnswer();
         await peerConnection.current.setLocalDescription(answer);
         channel.trigger('client-answer', { sdp: answer });
@@ -146,18 +176,9 @@ export function useWebRTC({ roomId, userName, localStream }: UseWebRTCProps) {
       if (!peerConnection.current) return;
       try {
         await peerConnection.current.setRemoteDescription(new RTCSessionDescription(data.sdp));
+        await processPendingCandidates();
       } catch (err) {
         console.error('Error handling answer:', err);
-      }
-    });
-
-    // Handle incoming ICE candidates
-    channel.bind('client-ice-candidate', async (data: { candidate: RTCIceCandidateInit }) => {
-      if (!peerConnection.current) return;
-      try {
-        await peerConnection.current.addIceCandidate(new RTCIceCandidate(data.candidate));
-      } catch (err) {
-        console.error('Error adding ICE candidate:', err);
       }
     });
 
@@ -179,6 +200,7 @@ export function useWebRTC({ roomId, userName, localStream }: UseWebRTCProps) {
     return () => {
       if (peerConnection.current) {
         peerConnection.current.close();
+        peerConnection.current = null;
       }
       pusher.unsubscribe(channelName);
     };

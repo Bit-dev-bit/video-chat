@@ -76,8 +76,8 @@ function JoinContent() {
 
 export default function JoinPage() {
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
-      <header className="border-b border-gray-800 p-4">
+    <div className="min-h-[100dvh] bg-gray-950 text-white flex flex-col">
+      <header className="border-b border-gray-800 p-4 shrink-0">
         <div className="container mx-auto flex items-center cursor-pointer" onClick={() => window.location.href='/'}>
           <Video className="w-5 h-5 text-blue-500 mr-2" />
           <span className="font-bold">MeetSync</span>
